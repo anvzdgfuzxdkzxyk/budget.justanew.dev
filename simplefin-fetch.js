@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const axios = require('axios');
 require('dotenv').config();
 
@@ -29,11 +31,24 @@ async function fetchAccountData ({url, username, password}) {
 	}
 }
 
-async function main () {
+// Function to write JSON data to a file
+function writeJsonToFile(data, filename) {
+	try {
+		const jsonString = JSON.stringify(data, null, 4); // 4-space indentation
+		const filePath = path.resolve(filename);
+		fs.writeFileSync(filePath, jsonString, 'utf-8'); // Don't need to close file because writeFileSync does this automatically
+	} catch (error) {
+		console.error('writeJsonToFile Error: ', error.message);
+	}
+}
+
+async function main () { // Example main function just for debugging at this point
 	const result = parseAccessUrl(accessUrl);
 	console.log(result);
 	const result2 = await fetchAccountData(result);
 	console.log(result2);
+	const filename = 'simplefin-latest.json'
+	writeJsonToFile(result2, filename);
 }
 
 main()
