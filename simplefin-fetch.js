@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
-require('dotenv').config();
+const dotenv = require('dotenv');
+
+const filePath = path.join (__dirname, 'private', 'simplefin-latest.json');
+const envPath = path.join (__dirname, 'private', '.env');
+dotenv.config({ path: envPath });
+
 
 accessUrl = process.env.SIMPLEFIN_ACCESS_URL
 
@@ -47,8 +52,7 @@ async function main () { // Example main function just for debugging at this poi
 	console.log(result);
 	const result2 = await fetchAccountData(result);
 	console.log(result2);
-	const filename = 'simplefin-latest.json'
-	writeJsonToFile(result2, filename);
+	writeJsonToFile(result2, filePath);
 }
 
 main()
