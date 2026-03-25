@@ -1,3 +1,4 @@
+const axios = require('axios');
 require('dotenv').config();
 
 accessUrl = process.env.SIMPLEFIN_ACCESS_URL
@@ -14,5 +15,25 @@ function parseAccessUrl (accessUrl) {
 	return { url, username, password }; // Returns endpoint url, username and password as standard javascript object
 }
 
-const result = parseAccessUrl(accessUrl);
-console.log(result);
+// Function to retreive JSON data from API endpoint using previously generated username and password
+async function fetchAccountData ({url, username, password}) {
+	try {
+		const response = await axios.get(url, { // Axios promise to get data from endpoint (JSON/error)
+			auth: { username, password },
+			params: { version: '2' } // Using 2026-03-19 v2 update, see https://www.simplefin.org/protocol.html#v2.0.0---2026-03-19
+		});
+		return response.data; // Returns json data
+	} catch (error) { // For more information about errors check https://www.simplefin.org/protocol.html#get-accounts
+		console.error('fetchAccountData Error: ', error.message);
+		throw error;
+	}
+}
+
+async function main () {
+	const result = parseAccessUrl(accessUrl);
+	console.log(result);
+	const result2 = await fetchAccountData(result);
+	console.log(result2);
+}
+
+main()
