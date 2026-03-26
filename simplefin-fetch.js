@@ -27,7 +27,11 @@ async function fetchAccountData ({url, username, password}) {
 	try {
 		const response = await axios.get(url, { // Axios promise to get data from endpoint (JSON/error)
 			auth: { username, password },
-			params: { version: '2' } // Using 2026-03-19 v2 update, see https://www.simplefin.org/protocol.html#v2.0.0---2026-03-19
+			params: {
+				version: '2', // Using 2026-03-19 v2 update, see https://www.simplefin.org/protocol.html#v2.0.0---2026-03-19
+				'start-date': 1769216400,
+				'end-date': 1774314000
+			},
 		});
 		return response.data; // Returns json data
 	} catch (error) { // For more information about errors check https://www.simplefin.org/protocol.html#get-accounts
