@@ -14,3 +14,9 @@
     - income (dot on chart, hover for exact value tooltip, shown in green, monthly)
     - expenses (dot on chart, hover for exact value tooltip, shown in red, monthly)
     - savings goals (by category, amnt saved towards goal as % filled slider on the right of screen)
+
+### dependencies for node.js
+    - axios
+    - dotenv
+    - fs
+    - sqlite3
