@@ -45,10 +45,13 @@ function verifyTables(db) {
         )`);
     });
 }
+function unixToISO(unixTs) {
+  // Detect seconds vs milliseconds
+  const ts = unixTs.toString().length === 10
+    ? unixTs * 1000   // seconds → ms
+    : unixTs;         // already ms
 
-function tsToDateTime(ts) {
-	const date = new Date(ts * 1000);
-	return date.toLocaleString();
+  return new Date(ts).toISOString();
 }
 
 function extractConnections(jsonFilePath) {
@@ -86,7 +89,7 @@ function insertAccounts(db, accountsData) {
 	accountsData.forEach(conn => {
 		const balance = parseFloat(conn.balance)
 		const availableBalance = parseFloat(conn['available-balance'] || 0);
-		const balanceDate = tsToDateTime(conn['balance-date'])
+		const balanceDate = unixToISO(conn['balance-date'])
 
 		stmt.run(
 			conn.id,
@@ -128,8 +131,8 @@ function insertTransactions(db, transData) {
 
 	transData.forEach(txn => {
 		const amount = parseFloat(txn.amount);
-		const posted = tsToDateTime(txn.posted);
-		const transacted_at = tsToDateTime(txn.posted);
+		const posted = unixToISO(txn.posted);
+		const transacted_at = unixToISO(txn.posted);
 		console.log(amount);
 		console.log(posted);
 		console.log(transacted_at);
